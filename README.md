@@ -78,6 +78,10 @@ High-level deploy steps
 4. Set environment variables:
    - In Amplify Console (Functions -> your function) add `GEMINI_API_KEY` with your Gemini API key.
 
+5. Frontend API base (Amplify hosting)
+   - Add an environment variable `API_BASE` in Amplify Console (App -> App settings -> Environment variables) with the value of your REST API base URL (example: `https://{api-id}.execute-api.{region}.amazonaws.com/{stage}`).
+   - The Amplify build will inject this value into `public/index.html` as a meta tag (`<meta name="api-base" content="...">`) so the frontend can discover the backend URL without editing JS.
+
 Persistence note (IMPORTANT)
 
 The function reads a bundled `videoDetails.json` and, when the `POST /video-title` endpoint is used, writes to `/tmp/videoDetails.json`. Writes to `/tmp` in Lambda are ephemeral and may be lost between invocations (cold starts). For reliable persistence you should store titles in S3 or DynamoDB. If you want, I can modify the function to use S3 or DynamoDB and add IAM role instructions.

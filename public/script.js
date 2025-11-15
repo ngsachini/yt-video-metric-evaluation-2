@@ -28,6 +28,26 @@ const METRICS = [
 
 const $ = (id) => document.getElementById(id);
 
+// Determine API base from injected meta tag or fall back to relative paths
+const API_BASE = (() => {
+  try {
+    const meta = document.querySelector('meta[name="api-base"]');
+    if (meta && meta.content && meta.content.trim()) {
+      // Strip trailing slash for consistent joining
+      return meta.content.trim().replace(/\/$/, '');
+    }
+  } catch (e) {
+    // ignore
+  }
+  return ''; // empty => use relative paths
+})();
+
+function apiUrl(path) {
+  if (!path) return API_BASE || path;
+  if (API_BASE) return `${API_BASE}${path.startsWith('/') ? path : '/' + path}`;
+  return path;
+}
+
 function createMetricButtons() {
   const container = $('metricsButtons');
   container.innerHTML = '';
@@ -64,7 +84,7 @@ async function evaluateMetric(metric, btn) {
   setLoading(true, `Evaluating: ${metric}`);
   btn.disabled = true;
   try {
-    const resp = await fetch('/api/evaluate-metric', {
+    const resp = await fetch(apiUrl('/api/evaluate-metric'), {
       method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ ...data, metric })
     });
@@ -109,7 +129,7 @@ async function evaluateAll() {
   setLoading(true, 'Evaluating all metrics (this may take a while)...');
   $('evaluateAllBtn').disabled = true;
   try {
-    const resp = await fetch('/api/evaluate-all', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+  const resp = await fetch(apiUrl('/api/evaluate-all'), { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
     const json = await resp.json();
     renderAllResults(json);
   } catch (err) {
@@ -159,7 +179,7 @@ async function fetchStoredTitle() {
   if (!url) return alert('Enter URL first');
   setLoading(true, 'Fetching stored title...');
   try {
-    const resp = await fetch(`/api/video-title?url=${encodeURIComponent(url)}`);
+  const resp = await fetch(apiUrl(`/api/video-title?url=${encodeURIComponent(url)}`));
     const json = await resp.json();
     if (json.title) {
       $('titleInput').value = json.title;
@@ -176,7 +196,7 @@ async function saveTitle() {
   if (!url || !title) return alert('URL and title required');
   setLoading(true, 'Saving title...');
   try {
-    const resp = await fetch('/api/video-title', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ url, title }) });
+  const resp = await fetch(apiUrl('/api/video-title'), { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ url, title }) });
     const json = await resp.json();
     if (json.ok) $('resultsContent').textContent = `Saved title for ${url}`;
     else $('resultsContent').textContent = 'Save failed: ' + JSON.stringify(json);
