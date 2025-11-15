@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>YouTube Explainer Evaluator — Gemini</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <main class="container">
+      <h1>YouTube Explainer Evaluator</h1>
+
+      <section class="card">
+        <h2>Main Input Form</h2>
+        <form id="mainForm">
+          <label>Youtube URL
+            <input id="url" name="url" type="url" placeholder="https://youtube.com/watch?v=..." required>
+          </label>
+
+          <label>Video Type
+            <select id="videoType" name="videoType">
+              <option value="concept explainer">concept explainer</option>
+              <option value="project explainer">project explainer</option>
+              <option value="demo video">demo video</option>
+            </select>
+          </label>
+
+          <label>Purpose of the Video
+            <input id="purpose" name="purpose" type="text" placeholder="What is the video trying to achieve?" />
+          </label>
+
+          <label>Key Concepts Explained
+            <textarea id="keyConcepts" name="keyConcepts" rows="3" placeholder="List main concepts"></textarea>
+          </label>
+
+          <label>Use of Justifications
+            <textarea id="justifications" name="justifications" rows="3" placeholder="Examples: why I did this..."></textarea>
+          </label>
+
+          <label>Goal of the Evaluation
+            <textarea id="goal" name="goal" rows="2" placeholder="What do you want this evaluation to focus on?"></textarea>
+          </label>
+
+          <div class="row">
+            <button id="fetchTitleBtn" type="button">Fetch Stored Title</button>
+            <button id="saveTitleBtn" type="button">Save Title</button>
+            <input id="titleInput" type="text" placeholder="Video title (for saving)" />
+          </div>
+        </form>
+      </section>
+
+      <section class="card" id="metricsSection">
+        <h2>Evaluation Metrics</h2>
+        <div id="metricsButtons" class="metrics-grid"></div>
+        <div class="row">
+          <button id="evaluateAllBtn" class="primary">Evaluate ALL</button>
+        </div>
+      </section>
+
+      <section class="card" id="results">
+        <h2>Results</h2>
+        <div id="resultsContent">No results yet.</div>
+      </section>
+
+      <footer>
+        <small>Ready for deployment on AWS Amplify. Uses Gemini 2.0 Flash via backend.</small>
+      </footer>
+    </main>
+
+    <script type="module" src="/script.js"></script>
+  </body>
+</html>

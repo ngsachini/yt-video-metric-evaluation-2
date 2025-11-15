@@ -1,0 +1,13 @@
+{
+  "name": "amplify-evaluator-function",
+  "version": "1.0.0",
+  "description": "Amplify function for YouTube explainer evaluator",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0"
+  }
+}
